@@ -7,8 +7,8 @@ export default function ReserveArmchairs(){
     } = requestData;
 
     return(
-        seats.map((info,index) => 
-            <p key={index}>Assento {parseInt(info)+1}</p>
+        seats.map((info, index) => 
+            <p key={index}>Assento {parseInt((info+1), 10)}</p>
         )
     );
 }

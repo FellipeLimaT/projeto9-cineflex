@@ -7,7 +7,7 @@ export default function Movies({showImages}){
         showImages.map((info, index) => 
             <Link to={`/sessoes/${info.id}`} key={index}>
                 <MovieBox>
-                    <img src={info.posterURL} alt='Movie Image'/>
+                    <img src={info.posterURL} alt=''/>
                 </MovieBox>
             </Link>
         )

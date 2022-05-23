@@ -37,7 +37,7 @@ export default function SessionTime(){
             <div className="spaceFooter"></div>
             <footer>
                 <MovieImageBox>
-                    <img src={data.posterURL} alt="Movie Image" />
+                    <img src={data.posterURL} alt="" />
                 </MovieImageBox>
                 <MovieTitle>
                     <p>{data.title}</p>

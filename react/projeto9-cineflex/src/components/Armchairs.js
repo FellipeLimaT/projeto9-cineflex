@@ -133,7 +133,7 @@ export default function Armchairs() {
       <div className="spaceFooter"></div>
       <footer>
         <MovieImageBox>
-          <img src={data.movie.posterURL} alt="Movie Image" />
+          <img src={data.movie.posterURL} alt="" />
         </MovieImageBox>
         <MovieTitle>
           <p>{data.movie.title}</p>
