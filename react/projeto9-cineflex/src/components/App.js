@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import HomePage from './HomePage';
 import SessionTime from './SessionTime';
+import Armchairs from './Armchairs';
+import FinishPage from './FinishPage';
 
 export default function App(){
  return(
@@ -14,8 +16,8 @@ export default function App(){
         <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/sessoes/:idFilme' element={<SessionTime />} />
-           {/*  <Route path="/assentos/:idSessao" element={<Armchairs />} />
-            <Route path="/sucesso" element={<FinishPage />} /> */}
+            <Route path="/assentos/:idSessao" element={<Armchairs />} />
+            <Route path="/sucesso" element={<FinishPage />} />
         </Routes>
      </BrowserRouter>
  );

@@ -1,9 +1,13 @@
-/* import React from 'react'
+import React from 'react'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import Armchair from "./Armchair";
+import Loading from "./Loading";
+import { PageTitle } from "./HomePage";
+import { MovieImageBox } from "./SessionTime";
+import { MovieTitle } from "./SessionTime";
 import styled from "styled-components";
+import Armchair from "./Armchair";
 import FormFields from "./FormFields";
 
 export let requestData = {};
@@ -15,9 +19,9 @@ export default function Armchairs() {
   const [data, setData] = useState(false);
   const [seatIDs, setSeatIDs] = useState([]);
   const [cpf, setCpf] = useState([]);
-  const [client, setClient] = useState("");
+  const [user, setUser] = useState("");
 
-  const chairStatus = {
+  const armchairStatus = {
     clickedIndex,
     setClickedIndex,
     setSeatIDs,
@@ -34,23 +38,26 @@ export default function Armchairs() {
     });
   }, []);
 
+  if (!data) {
+    return <Loading />;
+  }
 
   requestData = {
     title: data.movie.title,
     weekday: data.day.weekday,
     date: data.day.date,
-    name: client,
+    name: user,
     cpf: cpf,
     seats: Object.keys(clickedIndex)
   };
 
-  let compradores = [];
+  let buyers = [];
 
   for (let i = 0; i < requestData.name.length; i++) {
-    compradores[i] = {};
-    compradores[i].idAssento = seatIDs[i];
-    compradores[i].nome = requestData.name[i];
-    compradores[i].cpf = requestData.cpf[i];
+    buyers[i] = {};
+    buyers[i].idAssento = seatIDs[i];
+    buyers[i].nome = requestData.name[i];
+    buyers[i].cpf = requestData.cpf[i];
   }
 
   const getCpf = (e) => {
@@ -60,17 +67,17 @@ export default function Armchairs() {
     }
   };
 
-  const getClient = (index, e) => {
-    let newClient = [...client];
-    newClient[index] = e.target.value;
-    setClient(newClient);
+  const getUser = (index, e) => {
+    let newUser = [...user];
+    newUser[index] = e.target.value;
+    setUser(newUser);
   };
 
   function submitRequest(event) {
     event.preventDefault();
 
     if (seatIDs.length === 0) {
-      alert("Você não reservou nenhum assento!");
+      alert("Reserve um assento primeiro!");
       return;
     }
 
@@ -78,65 +85,62 @@ export default function Armchairs() {
       "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many",
       {
         ids: seatIDs,
-        compradores: compradores
+        buyers: buyers
       }
     );
 
-    navigate("/sucesso");
   }
 
   return (
-    <>
-      <Voltar onClick={() => navigate(-1)}>Voltar</Voltar>
+    <div>      
       <header>
-        <div className="sub-topo">Selecione o(s) assento(s)</div>
+        <PageTitle>Selecione o(s) assento(s)</PageTitle>
       </header>
-      <content>
+      <main>
         <div className="seats">
-          <Chair chairInfo={data} chairStatus={chairStatus} />
+          <Armchair armchairInfo={data} armchairStatus={armchairStatus} />
         </div>
-        <div className="statusBar">
-          <div className="subBar">
+        <div className="legendBar">
+          <div className="legendBarBox">
             <div className="seat selected" style={{ cursor: "default" }}></div>
-            <h2>Selecionado</h2>
+            <p>Selecionado</p>
           </div>
-          <div className="subBar">
+          <div className="legendBarBox">
             <div className="seat" style={{ cursor: "default" }}></div>
-            <h2>Disponível</h2>
+            <p>Disponível</p>
           </div>
-          <div className="subBar">
-            <div
-              className="seat indisponivel"
-              style={{ cursor: "default" }}
-            ></div>
-            <h2>Indisponível</h2>
+          <div className="legendBarBox">
+            <div className="seat unavailable" style={{ cursor: "default" }}></div>
+            <p>Indisponível</p>
           </div>
         </div>
         <form onSubmit={submitRequest}>
           <FormFields
             seatIDs={seatIDs}
             getCpf={getCpf}
-            client={client}
+            user={user}
             cpf={cpf}
             data={requestData}
-            getClient={getClient}
+            getUser={getUser}
           />
-          <Button>
-            <button type="submit">Reservar assento(s)</button>
-          </Button>
+          <Link to={`/sucesso`} style={{ textDecoration: 'none' }}>
+            <Button>
+                <button type="submit">Reservar assento(s)</button>
+            </Button>
+          </Link>
         </form>
-      </content>
-      <div className="espaçofooter"></div>
+      </main>
+      <div className="spaceFooter"></div>
       <footer>
-        <div className="footerImgBox">
-          <img src={data.movie.posterURL} alt="" />
-        </div>
-        <FooterTitle>
-          <h4>{data.movie.title}</h4>
-          <h4>{`${data.day.weekday} - ${data.day.date}`}</h4>
-        </FooterTitle>
+        <MovieImageBox>
+          <img src={data.movie.posterURL} alt="Movie Image" />
+        </MovieImageBox>
+        <MovieTitle>
+          <p>{data.movie.title}</p>
+          <p>{`${data.day.weekday} - ${data.day.date}`}</p>
+        </MovieTitle>
       </footer>
-    </>
+    </div>
   );
 }
 
@@ -144,23 +148,16 @@ export const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 56px;
+  margin-top: 57px;
   margin-bottom: 30px;
 
   button {
     border: none;
-    background-color: #e8833a;
-    color: #ffffff;
-    border-radius: 4px;
-    width: 226px;
+    background-color: #E8833A;
+    color: #FFFFFF;
+    border-radius: 3px;
+    width: 225px;
     height: 42px;
   }
 `;
 
-const FooterTitle = styled.div`
-  flex-wrap: wrap;
-  height: 40px;
-  font-size: 20px;
-  color: #293845;
-`;
- */

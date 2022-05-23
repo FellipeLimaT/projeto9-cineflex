@@ -29,7 +29,7 @@ export default function HomePage() {
     );
 }
 
-const PageTitle = styled.div`
+export const PageTitle = styled.div`
     width: 100%;
     height: 110px;
     font-size: 24px;

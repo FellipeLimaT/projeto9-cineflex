@@ -5,7 +5,7 @@ import styled from "styled-components";
 export default function SessionDate({ sessionInfo }) {
 
     return (
-        sessionInfo.map((info, index) =>
+        sessionInfo.days.map((info, index) =>
             <div key={index}>
                 <h3>{`${info.weekday} - ${info.date}`}</h3>
                 <TimesBox>

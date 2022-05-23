@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { PageTitle } from "./HomePage";
+import Loading from "./Loading";
 import SessionDate from "./SessionDate";
 import styled from "styled-components";
 
@@ -14,11 +16,15 @@ export default function SessionTime(){
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
 
         promise.then((response) => {
-            setData(response.data);
-            console.log(response.data)
+            setData(response.data);            
         });
-    },[]);
+    },[data.length, idFilme]);
 
+    if (!data) {
+        console.log(data)
+        return <Loading />;        
+    }
+    console.log(data)
     return(
         <div>  
             <header>
@@ -41,19 +47,7 @@ export default function SessionTime(){
     );
 }
 
-const PageTitle = styled.div`
-    width: 100%;
-    height: 110px;
-    font-size: 24px;
-    font-weight: 400;
-    background-color: #FFFFFF;
-    color: #293845;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const MovieImageBox = styled.div`
+export const MovieImageBox = styled.div`
     width: 64px;
     height: 89px;
     margin: 0 14px 0 10px;
@@ -70,7 +64,7 @@ const MovieImageBox = styled.div`
     }    
 `;
 
-const MovieTitle = styled.div`
+export const MovieTitle = styled.div`
     height: 40px;
     font-size: 26px;
     color: #293845;
